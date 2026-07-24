@@ -82,3 +82,7 @@ A naive split of raw <body> text includes inline CSS and JS variables, completel
 ### Why I handle Content-Type checking with a 422 instead of a 4xx or 5xx
 
 I strictly check the target's Content Type header before passing anything to Cheerio. If someone submits a valid link to a heavy PDF or JSON API, trying to parse it as a DOM tree would cause memory spikes. I return a 422 Unprocessable Entity instead of a 400 or 500 because the URL syntax is perfectly valid and my server didn't fail, but the target's payload format is unprocessable.
+
+
+
+For this project, I used AI as a pair-programming assistant to accelerate writing boilerplate code and tests. Specifically, I used it to draft the initial Cheerio DOM parsing skeleton and the regex used to normalize whitespace in my word count logic. Once I had those starting blocks, I took over completely to manually restructure the code into a clean, modular service architecture.
