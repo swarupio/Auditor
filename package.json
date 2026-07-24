@@ -1,0 +1,18 @@
+{
+  "name": "page-pulse",
+  "version": "1.0.0",
+  "description": "URL auditor tool for Digital Heroes training task",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "npx jest --forceExit"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
