@@ -1,4 +1,4 @@
-# Page Pulse
+# Auditor
 
 A URL auditing tool that fetches any web page and returns a structured report with SEO and structure metrics.
 
@@ -73,12 +73,12 @@ The server starts on `http://localhost:3000` by default. Set the `PORT` environm
 
 ### Why I chose a 10-second timeout
 
-*(Fill in your reasoning here.)*
+I used an AbortController to enforce a 10 second timeout on all fetches to prevent my Express server from hanging on dead links. Ten seconds is enough grace period for cold starts on free tier hosts, but fails fast with a 408 Request Timeout if a site is unresponsive. This keeps the Node event loop free and guarantees the app won't crash.
 
 ### Why I defined word count this way
 
-*(Fill in your reasoning here.)*
+A naive split of raw <body> text includes inline CSS and JS variables, completely skewing the metric. To fix this efficiently, I explicitly strip non visible tags (<script>, <style>, <svg>, etc.) using Cheerio before extracting text. I then use Regex to normalize all whitespace and line breaks. It’s a fast, lightweight way to get an accurate count of actual human readable text.
 
 ### Why I handle Content-Type checking with a 422 instead of a 4xx or 5xx
 
-*(Fill in your reasoning here.)*
+I strictly check the target's Content Type header before passing anything to Cheerio. If someone submits a valid link to a heavy PDF or JSON API, trying to parse it as a DOM tree would cause memory spikes. I return a 422 Unprocessable Entity instead of a 400 or 500 because the URL syntax is perfectly valid and my server didn't fail, but the target's payload format is unprocessable.
