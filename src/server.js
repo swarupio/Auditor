@@ -10,8 +10,10 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.use("/api", auditRouter);
 
-app.listen(PORT, () => {
-  console.log(`Page Pulse running on http://localhost:${PORT}`);
-});
+if (process.env.VERCEL !== "1") {
+  app.listen(PORT, () => {
+    console.log(`Page Pulse running on http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
