@@ -127,4 +127,36 @@ describe("fetchPage (integration with mocks)", () => {
 
     jest.useRealTimers();
   });
+
+  test("throws 404 for 4xx HTTP status (e.g. page not found)", async () => {
+    const mockResponse = {
+      headers: new Map([["content-type", "text/plain"]]),
+      text: async () => "Not Found",
+      status: 404,
+    };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { fetchPage } = require("../src/services/fetcher");
+
+    await expect(fetchPage("https://github.com/nonexistent-user")).rejects.toMatchObject({
+      statusCode: 404,
+      message: expect.stringContaining("404"),
+    });
+  });
+
+  test("throws 502 for 5xx HTTP status", async () => {
+    const mockResponse = {
+      headers: new Map([["content-type", "text/plain"]]),
+      text: async () => "Server Error",
+      status: 500,
+    };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { fetchPage } = require("../src/services/fetcher");
+
+    await expect(fetchPage("https://example.com/error")).rejects.toMatchObject({
+      statusCode: 502,
+      message: expect.stringContaining("500"),
+    });
+  });
 });

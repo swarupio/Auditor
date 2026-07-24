@@ -13,9 +13,22 @@ async function fetchPage(url) {
     });
 
     const responseTimeMs = Date.now() - startTime;
-    const contentType = response.headers.get("content-type") || "";
 
-    console.log(`[PagePulse] Content-Type for ${url}: "${contentType}"`);
+    if (response.status >= 400 && response.status < 500) {
+      throw Object.assign(
+        new Error(`Page returned ${response.status} — the URL may not exist or is unreachable`),
+        { statusCode: 404, code: "NOT_FOUND" }
+      );
+    }
+
+    if (response.status >= 500) {
+      throw Object.assign(
+        new Error(`Page returned ${response.status} — the server encountered an error`),
+        { statusCode: 502, code: "SERVER_ERROR" }
+      );
+    }
+
+    const contentType = response.headers.get("content-type") || "";
 
     if (!contentType.includes("text/html")) {
       throw Object.assign(

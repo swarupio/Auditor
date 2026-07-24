@@ -53,9 +53,11 @@ The server starts on `http://localhost:3000` by default. Set the `PORT` environm
 | Status | Scenario | Example body |
 |--------|----------|--------------|
 | 400 | Missing or malformed URL | `{"error": "Malformed URL: \"not-a-url\" is not a valid URL"}` |
+| 404 | Page returned 4xx (not found) | `{"error": "Page returned 404 — the URL may not exist or is unreachable"}` |
 | 408 | Request timed out (>10s) | `{"error": "Request timed out after 10000ms"}` |
 | 422 | Response is not HTML | `{"error": "Expected HTML but got \"application/json\""}` |
 | 502 | Host unreachable / DNS failure | `{"error": "Unable to reach host: getaddrinfo ENOTFOUND nonexistent.example"}` |
+| 502 | Server returned 5xx | `{"error": "Page returned 500 — the server encountered an error"}` |
 
 ## Deployment (Render)
 
